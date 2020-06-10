@@ -1,0 +1,5 @@
+﻿  Source.cpp
+C:\Users\shadv\Dropbox\coding\offers_2020\_с++_с\__Стас_с++\маятник\compendulum_OpenGL\compendulum_OpenGL\Source.cpp(36,20): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\shadv\Dropbox\coding\offers_2020\_с++_с\__Стас_с++\маятник\compendulum_OpenGL\compendulum_OpenGL\Source.cpp(43,20): warning C4018: <: несоответствие типов со знаком и без знака
+LINK : warning LNK4098: библиотека по умолчанию "MSVCRT" конфликтует с использованием других библиотек; используйте /NODEFAULTLIB:library
+  compendulum_OpenGL.vcxproj -> C:\Users\shadv\Dropbox\coding\offers_2020\_с++_с\__Стас_с++\маятник\compendulum_OpenGL\Debug\compendulum_OpenGL.exe
