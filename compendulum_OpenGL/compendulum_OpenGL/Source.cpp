@@ -1,24 +1,24 @@
-#include <GLFW/glfw3.h> // прекомп. библиотеки OpengL
+#include <GLFW/glfw3.h> // РїСЂРµРєРѕРјРї. Р±РёР±Р»РёРѕС‚РµРєРё OpengL
 #include <iostream> 
 #include <math.h>
-#include <glut.h>//старая библ. для OpenGL
+#include <glut.h>//СЃС‚Р°СЂР°СЏ Р±РёР±Р». РґР»СЏ OpenGL
 #include <string> 
 
 
 
-#define PI 3.141592653589 //число пи
-#define N 1000 //число точек для графика. в будущем можно сделать его не константным
+#define PI 3.141592653589 //С‡РёСЃР»Рѕ РїРё
+#define N 1000 //С‡РёСЃР»Рѕ С‚РѕС‡РµРє РґР»СЏ РіСЂР°С„РёРєР°. РІ Р±СѓРґСѓС‰РµРј РјРѕР¶РЅРѕ СЃРґРµР»Р°С‚СЊ РµРіРѕ РЅРµ РєРѕРЅСЃС‚Р°РЅС‚РЅС‹Рј
 using namespace std;
 
-struct compendulum { // маятник
-	double L; // длина маятника
-	double g; // ускорение свободного падения
-	double angle0; // стартовый угол
-	double velocity; // стартовая скорость
-	double m; // вес маятника
-	double friction; // трение
+struct compendulum { // РјР°СЏС‚РЅРёРє
+	double L; // РґР»РёРЅР° РјР°СЏС‚РЅРёРєР°
+	double g; // СѓСЃРєРѕСЂРµРЅРёРµ СЃРІРѕР±РѕРґРЅРѕРіРѕ РїР°РґРµРЅРёСЏ
+	double angle0; // СЃС‚Р°СЂС‚РѕРІС‹Р№ СѓРіРѕР»
+	double velocity; // СЃС‚Р°СЂС‚РѕРІР°СЏ СЃРєРѕСЂРѕСЃС‚СЊ
+	double m; // РІРµСЃ РјР°СЏС‚РЅРёРєР°
+	double friction; // С‚СЂРµРЅРёРµ
 };
-double **calculate(compendulum cmp); // функция обсчета методом эйлера
+double **calculate(compendulum cmp); // С„СѓРЅРєС†РёСЏ РѕР±СЃС‡РµС‚Р° РјРµС‚РѕРґРѕРј СЌР№Р»РµСЂР°
 double get_maxPhi(double **calc); 
 double get_maxPPhi(double **calc);
 double get_minPhi(double **calc);
@@ -26,25 +26,25 @@ double get_minPPhi(double **calc);
 double get_maxTime(double **calcs);
 double to_rad(double angle);
 double round_up(double value, int decimal_places);
-void make_phaseGraph(double **calcs, int time, double spacing); //функция отрисовки фаз. портрета
-void make_timeGraph(double **calcs, int time, double spacing); // функция отрисовки временного графика
-void draw_cmp(double **calcs, compendulum cmp, int time, double spacing); // функция отрисовки модели маятника
-double accuracy_period(double **calcs, compendulum cmp); //функция для тестирования по периоду... период не изм в случае линейного ДУ, изменяется в случае нелин. ДУ, не измен. в случае нелин ДУ при малых углах
-void outText(float x, float y, string string) { //функция отрисовки текста шрифт 10 times new roman
+void make_phaseGraph(double **calcs, int time, double spacing); //С„СѓРЅРєС†РёСЏ РѕС‚СЂРёСЃРѕРІРєРё С„Р°Р·. РїРѕСЂС‚СЂРµС‚Р°
+void make_timeGraph(double **calcs, int time, double spacing); // С„СѓРЅРєС†РёСЏ РѕС‚СЂРёСЃРѕРІРєРё РІСЂРµРјРµРЅРЅРѕРіРѕ РіСЂР°С„РёРєР°
+void draw_cmp(double **calcs, compendulum cmp, int time, double spacing); // С„СѓРЅРєС†РёСЏ РѕС‚СЂРёСЃРѕРІРєРё РјРѕРґРµР»Рё РјР°СЏС‚РЅРёРєР°
+double accuracy_period(double **calcs, compendulum cmp); //С„СѓРЅРєС†РёСЏ РґР»СЏ С‚РµСЃС‚РёСЂРѕРІР°РЅРёСЏ РїРѕ РїРµСЂРёРѕРґСѓ... РїРµСЂРёРѕРґ РЅРµ РёР·Рј РІ СЃР»СѓС‡Р°Рµ Р»РёРЅРµР№РЅРѕРіРѕ Р”РЈ, РёР·РјРµРЅСЏРµС‚СЃСЏ РІ СЃР»СѓС‡Р°Рµ РЅРµР»РёРЅ. Р”РЈ, РЅРµ РёР·РјРµРЅ. РІ СЃР»СѓС‡Р°Рµ РЅРµР»РёРЅ Р”РЈ РїСЂРё РјР°Р»С‹С… СѓРіР»Р°С…
+void outText(float x, float y, string string) { //С„СѓРЅРєС†РёСЏ РѕС‚СЂРёСЃРѕРІРєРё С‚РµРєСЃС‚Р° С€СЂРёС„С‚ 10 times new roman
 	//const char *c;
 	glRasterPos2f(x, y);
 	for (int i = 0; i < string.length(); i++) {
 		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_10, string[i]);
 	}
 }
-void outText24(float x, float y, string string) { //функция отрисовки текста шрифт 24 times new roman
+void outText24(float x, float y, string string) { //С„СѓРЅРєС†РёСЏ РѕС‚СЂРёСЃРѕРІРєРё С‚РµРєСЃС‚Р° С€СЂРёС„С‚ 24 times new roman
 	//const char *c;
 	glRasterPos2f(x, y);
 	for (int i = 0; i < string.length(); i++) {
 		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, string[i]);
 	}
 }
-void outInfoCmp(double **calcs, int time) { //функция отрисовки информации о маятнике, текущее время, текущий угол, текущая скорость
+void outInfoCmp(double **calcs, int time) { //С„СѓРЅРєС†РёСЏ РѕС‚СЂРёСЃРѕРІРєРё РёРЅС„РѕСЂРјР°С†РёРё Рѕ РјР°СЏС‚РЅРёРєРµ, С‚РµРєСѓС‰РµРµ РІСЂРµРјСЏ, С‚РµРєСѓС‰РёР№ СѓРіРѕР», С‚РµРєСѓС‰Р°СЏ СЃРєРѕСЂРѕСЃС‚СЊ
 	double x = -0.9;
 	double y = 0.9;
 	glColor3d(0.0, 0.0, 0.0);
@@ -75,29 +75,29 @@ int main(void)
 
 	my_cmp.angle0 = 1.01*PI;
 	my_cmp.velocity = 0.5;*/
-	double **calcs = calculate(my_cmp); //calcs - массив для высчитанных точек, время, угол, скорость
+	double **calcs = calculate(my_cmp); //calcs - РјР°СЃСЃРёРІ РґР»СЏ РІС‹СЃС‡РёС‚Р°РЅРЅС‹С… С‚РѕС‡РµРє, РІСЂРµРјСЏ, СѓРіРѕР», СЃРєРѕСЂРѕСЃС‚СЊ
 	cout << endl << accuracy_period(calcs, my_cmp)<<endl;
 	GLFWwindow* window;
 	if (!glfwInit())
 		return -1;
 
-	window = glfwCreateWindow(1080, 720, "Hello World", NULL, NULL); // окно отобржания
-	glfwSetWindowSizeLimits(window, 1080, 720, 1080, 720); //фиксированя длина и ширина
+	window = glfwCreateWindow(1080, 720, "Hello World", NULL, NULL); // РѕРєРЅРѕ РѕС‚РѕР±СЂР¶Р°РЅРёСЏ
+	glfwSetWindowSizeLimits(window, 1080, 720, 1080, 720); //С„РёРєСЃРёСЂРѕРІР°РЅСЏ РґР»РёРЅР° Рё С€РёСЂРёРЅР°
 	if (!window)
 	{
 		glfwTerminate();
 		return -1;
 	}
 	glfwMakeContextCurrent(window);
-	int time = 0; //счетчки времени
-	double spacing = 0.9; // раздел между отображениями
+	int time = 0; //СЃС‡РµС‚С‡РєРё РІСЂРµРјРµРЅРё
+	double spacing = 0.9; // СЂР°Р·РґРµР» РјРµР¶РґСѓ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏРјРё
 	while (!glfwWindowShouldClose(window))
 	{
 		/* Render here */
-		glClearColor(1.0, 1.0, 1.0, 0.0); //белый фон
+		glClearColor(1.0, 1.0, 1.0, 0.0); //Р±РµР»С‹Р№ С„РѕРЅ
 
 		glClear(GL_COLOR_BUFFER_BIT);
-		//основные функции отрисовки
+		//РѕСЃРЅРѕРІРЅС‹Рµ С„СѓРЅРєС†РёРё РѕС‚СЂРёСЃРѕРІРєРё
 		make_phaseGraph(calcs, time, spacing);
 		make_timeGraph(calcs, time, spacing);
 		draw_cmp(calcs, my_cmp, time, 0.6);
@@ -126,7 +126,7 @@ double  **calculate(compendulum cmp) {
 	calculations[0][2] = cmp.velocity; // deriv angle column
 	for (int i = 1; i < N; i++) {
 		calculations[i][0] = calculations[i - 1][0] + dt;
-		calculations[i][2] = calculations[i - 1][2] - (cmp.g / cmp.L * sin(calculations[i - 1][1]) + cmp.friction / cmp.m *calculations[i - 1][2])* dt; // основная формула расчета ДУ методом эйлера
+		calculations[i][2] = calculations[i - 1][2] - (cmp.g / cmp.L * sin(calculations[i - 1][1]) + cmp.friction / cmp.m *calculations[i - 1][2])* dt; // РѕСЃРЅРѕРІРЅР°СЏ С„РѕСЂРјСѓР»Р° СЂР°СЃС‡РµС‚Р° Р”РЈ РјРµС‚РѕРґРѕРј СЌР№Р»РµСЂР°
 		calculations[i][1] = calculations[i][2] * dt + calculations[i - 1][1];
 	}
 	
@@ -134,7 +134,7 @@ double  **calculate(compendulum cmp) {
 	return calculations;
 }
 double accuracy_period(double **calcs, compendulum cmp) {
-	//период расчитывается по двум экстремумам функции angle(time)
+	//РїРµСЂРёРѕРґ СЂР°СЃС‡РёС‚С‹РІР°РµС‚СЃСЏ РїРѕ РґРІСѓРј СЌРєСЃС‚СЂРµРјСѓРјР°Рј С„СѓРЅРєС†РёРё angle(time)
 	double T_analytics = 2 * PI*sqrt(cmp.L / cmp.g);
 	double T_calculated = 0;
 	double time1_max = 0, time2_max = 0;
@@ -164,7 +164,7 @@ void make_phaseGraph(double **calcs, int time, double spacing) {
 	double x = 0;
 	double y = 0;
 
-	//нормировка и относительная система координат (формулы из ан. геом.)
+	//РЅРѕСЂРјРёСЂРѕРІРєР° Рё РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅР°СЏ СЃРёСЃС‚РµРјР° РєРѕРѕСЂРґРёРЅР°С‚ (С„РѕСЂРјСѓР»С‹ РёР· Р°РЅ. РіРµРѕРј.)
 	double x_factor = (1 - 0) / (max_phi - min_phi)*spacing;
 	double y_factor = (1 - 0) / (max_p_phi - min_p_phi)*spacing;
 	double x_transfer = -(max_phi + min_phi) / 2 * x_factor + 0.5;
